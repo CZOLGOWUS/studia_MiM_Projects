@@ -1,0 +1,57 @@
+A51 MACRO ASSEMBLER  MAIN2                                                                10/29/2020 20:15:12 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\main2.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE main2.a51 SET(SMALL) DEBUG PRINT(.\Listings\main2.lst) OBJECT(.\Objects
+                      \main2.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ;PROG SEGMENT CODE
+                       2     ;
+                       3     ;CSEG AT 0
+                       4     ;JMP start
+                       5     ;
+                       6     ;RSEG PROG
+                       7     ;start:
+                       8     ;MOV R2, P2                   ;w R2 teraz bedzie obecny stan diod
+                       9     ; czekaj:                     ;petla oczekujaca na sygnal niski z przycisku
+                      10     ;    MOV A, P3                ;gdy nie wcisnieto niczego, A=P3=FFh
+                      11     ;    CPL A                    ;(CLP - neguje) gdy nie wcisnieto niczego, A=0
+                      12     ;    JZ czekaj                ;jesli A=0 to kontynuuj petle
+                      13     ;XRL A, R2                    ;koniec petli, (*)                                            
+                      14     ;MOV #R3, A
+                      15     ;MOV P2, A                    ;zmien stan diod na nowy
+                      16     ; wciska:                     ;petla oczekujaca na sygnal wysoki z przycisku (az przestanie
+                              naciskac)
+                      17     ;    MOV A, P3
+                      18     ;    CPL A
+                      19     ;    JNZ wciska               ;jesli A=0 (przestanie wszystko wciskac)
+                      20     ;JMP start
+                      21     ;
+                      22     ;END 
+                      23     
+                      24     ;         (*) Teraz w A jest bit 1 odpowiadajacy nacisnietemu przyciskowi
+                      25     ;         Polecenie zamieni ten bit w R2 na przeciwny, ktory w Akumulatorze mial 1,
+                      26     ;         a zerowe bity z Akumulatora oznaczaja zeby nie zmieniac bitu w R2.
+                      27     
+                      28     ; Zakladam ze uzytkownik na krotki czas wciska pojedynczo przyciski.
+                      29     ; Gdy uzytkownik naciska kilka przyciskow na raz, zadziala tylko nacisniety jako pierwszy.
+                      30     ; Ciagle trzymanie wcisnietego klawisza tez spowoduje brak reakcji z ukladu do poki sie nie
+                              pusci wszystkich klawiszy
+*** WARNING #A41 IN 30 (main2.a51, LINE 30): MISSING 'END' STATEMENT
+A51 MACRO ASSEMBLER  MAIN2                                                                10/29/2020 20:15:12 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  1 WARNING(S), 0 ERROR(S)

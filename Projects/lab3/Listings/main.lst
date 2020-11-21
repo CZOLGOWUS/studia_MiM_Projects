@@ -1,0 +1,159 @@
+A51 MACRO ASSEMBLER  MAIN                                                                 11/21/2020 21:48:06 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\main.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE main.a51 SET(SMALL) DEBUG PRINT(.\Listings\main.lst) OBJECT(.\Objects\m
+                      ain.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     PROG SEGMENT CODE
+                       2             
+  004C                 3             TimerHB DATA 76
+  0001                 4             TimerLB DATA 01
+  007F                 5             TimerOnStatus Data 7Fh
+  00FF                 6             TimerOffStatus Data 0FFh
+                       7             
+----                   8     CSEG AT 0
+0000 020000   F        9     JMP start
+                      10     
+----                  11     RSEG PROG
+0000                  12     start:
+0000 7BFF             13             MOV R3,#0FFh
+0002 7C08             14             MOV R4,#8
+0004 7DFF             15             MOV R5,#0FFh
+0006 75F002           16             MOV B,#2
+                      17             
+0009 758C4C           18             MOV TH0,#TimerHB
+000C 758A01           19             MOV TL0,#TimerLB
+000F 758901           20             MOV TMOD,#01    ; 16-bitowy timer 0
+                      21             
+0012                  22             checkForSwitch0L:
+0012 E5B0             23                     MOV A,P3
+0014 B47FFB           24                     CJNE A,#TimerOnStatus,checkForSwitch0L
+0017 D28C             25                     SETB TR0                ; startujemy timer 0
+                      26             
+0019                  27             waitForSwitch0H:
+0019 108D11           28                     JBC TF0,DecrementR3
+001C E5B0             29                     MOV A,P3
+001E B4FFF8           30                     CJNE A,#TimerOffStatus,waitForSwitch0H
+                      31                     
+                      32                     ;przygotuj na zapalanie
+0021 C28C             33                     CLR TR0
+0023 C28D             34                     CLR TF0
+0025 758C4C           35                     MOV TH0,#TimerHB                                                
+0028 758A01           36                     MOV TL0,#TimerLB
+002B 800A             37                     SJMP continue
+                      38             
+002D                  39             DecrementR3:
+002D C28D             40                     CLR TF0
+002F 758C4C           41                     MOV TH0,#TimerHB                                                ;1.     na 
+                             dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
+0032 758A01           42                     MOV TL0,#TimerLB                                                ;2. na dwoc
+                             h linijkach resetujemy timer zeby liczyl do 0.05sec
+0035 DBE2             43                     DJNZ R3,waitForSwitch0H                                 ;zliczamy ilosc prz
+                             epelnien przez Dekrementacje R3
+                      44             
+0037                  45             continue:
+0037 E5FF             46                     MOV A,0FFh
+0039 9B               47                     SUBB A,R3                                                               
+003A FB               48                     MOV R3,A                                                                ;te
+                             raz w R3 jest ilosc przepelnien podczas trzymania przycisku czyli (ilosc przepelnien * 0.05sec)= czas wlaczania sie diód
+003B 8000             49                     JMP resetAcc
+                      50                     
+003D                  51             resetAcc:
+003D EB               52                     MOV A,R3
+003E 758C4C           53                     MOV TH0,#TimerHB
+A51 MACRO ASSEMBLER  MAIN                                                                 11/21/2020 21:48:06 PAGE     2
+
+0041 758A01           54                     MOV TL0,#TimerLB        
+0044 D28C             55                     SETB TR0
+0046 8000             56                     JMP waitForNextLED
+                      57                     
+0048                  58             waitForNextLED:
+                      59                     
+                      60                     
+0048 308DFD           61                     JNB TF0,$
+004B C28D             62                     CLR TF0
+                      63                     
+004D 14               64                     DEC A
+                      65                     
+004E 758C4C           66                     MOV TH0,#TimerHB                                                ;1.     na 
+                             dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
+0051 758A01           67                     MOV TL0,#TimerLB        
+0054 70F2             68                     JNZ waitForNextLED
+                      69                     
+                      70                     
+0056 8000             71                     JMP nextLedOn
+                      72                     
+                      73                     
+                      74                     
+0058                  75             nextLedOn:
+0058 E5A0             76                     MOV A,P2
+005A 75F002           77                     MOV B,#2
+005D 84               78                     DIV AB
+                      79     
+                      80                     
+005E F5A0             81                     MOV P2,A
+                      82                     
+0060 DCDB             83                     DJNZ R4,resetAcc
+                      84                     
+                      85                     
+                      86                     ;wait for the last diode to lith up for a period of time
+0062 EB               87                     MOV A,R3
+0063 758C4C           88                     MOV TH0,#TimerHB
+0066 758A01           89                     MOV TL0,#TimerLB        
+0069 D28C             90                     SETB TR0
+                      91                     
+006B                  92                     lastLED:
+006B 308DFD           93                     JNB TF0,$
+006E C28D             94                     CLR TF0
+0070 14               95                     DEC A
+0071 758C4C           96                     MOV TH0,#TimerHB                                                ;1.     na 
+                             dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
+0074 758A01           97                     MOV TL0,#TimerLB        
+0077 70F2             98                     JNZ lastLED
+                      99                     
+                     100                     
+0079 74FF            101                     MOV A,#0FFh
+007B F5A0            102                     MOV P2,A
+                     103     
+                     104     END
+                             
+A51 MACRO ASSEMBLER  MAIN                                                                 11/21/2020 21:48:06 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+B. . . . . . . . .  D ADDR   00F0H   A   
+CHECKFORSWITCH0L .  C ADDR   0012H   R   SEG=PROG
+CONTINUE . . . . .  C ADDR   0037H   R   SEG=PROG
+DECREMENTR3. . . .  C ADDR   002DH   R   SEG=PROG
+LASTLED. . . . . .  C ADDR   006BH   R   SEG=PROG
+NEXTLEDON. . . . .  C ADDR   0058H   R   SEG=PROG
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+PROG . . . . . . .  C SEG    007DH       REL=UNIT
+RESETACC . . . . .  C ADDR   003DH   R   SEG=PROG
+START. . . . . . .  C ADDR   0000H   R   SEG=PROG
+TF0. . . . . . . .  B ADDR   0088H.5 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TIMERHB. . . . . .  D ADDR   004CH   A   
+TIMERLB. . . . . .  D ADDR   0001H   A   
+TIMEROFFSTATUS . .  D ADDR   00FFH   A   
+TIMERONSTATUS. . .  D ADDR   007FH   A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+WAITFORNEXTLED . .  C ADDR   0048H   R   SEG=PROG
+WAITFORSWITCH0H. .  C ADDR   0019H   R   SEG=PROG
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

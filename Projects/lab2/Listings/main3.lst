@@ -1,0 +1,60 @@
+A51 MACRO ASSEMBLER  MAIN3                                                                10/31/2020 14:54:33 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\main3.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE main3.a51 SET(SMALL) DEBUG PRINT(.\Listings\main3.lst) OBJECT(.\Objects
+                      \main3.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     PROG SEGMENT CODE
+                       2     
+----                   3     CSEG AT 0
+0000 020000   F        4     JMP start
+                       5     
+----                   6     RSEG PROG
+0000                   7     start:
+0000 AAA0              8     MOV R2, P2                    ;wpisanie do R2 stanu poczatkowego diod
+0002 ABB0              9     MOV R3, P3                    ;poczatkowy stan nacisniecia przyciskow
+                      10     
+0004                  11      czekaj:                      ;petla oczekujaca na nowy sygnal niski z przycisku
+0004 E5B0             12         MOV A, P3                 ;do A przenies biezacy stan przyciskow
+0006 6B               13         XRL A, R3                 ;ktore przyciski zmienily swoj stan (porownujemy biezace P2 z
+                              R3, czyli poprzednim stane przyciskow)
+                      14             
+0007 60FB             15      JZ czekaj                    ;jesli stan pzryciskow sie zmienil przejdz dalej
+                      16        
+0009 5B               17         ANL A, R3                 ;w A zostaja tylko te ktore zmienily sie z 1 na 0 (przycisk z
+                             ostal nacisniety a nie puszczony)
+000A ABB0             18         MOV R3, P3                ;ustaw nowy poprzedni stan przyciskow
+                      19             
+000C 60F6             20      JZ czekaj                    ;jesli A=0 to kontynuuj petle (puszczono przycisk a nie nacis
+                             nieto)     
+                      21        
+000E 6A               22         XRL A, R2                 ;A nie rowne 0 zatem niezerowe bity A reprezentuja diody ktor
+                             e maja zmienic stan na przeciwny,
+000F F5A0             23         MOV P2, A                 ;zmiana stanu diod na nowy
+0011 FA               24         MOV R2, A                 ;do R2 wpisujemy nowy stan diod
+                      25             
+0012 80F0             26      JMP czekaj                   ;restart
+                      27     END 
+A51 MACRO ASSEMBLER  MAIN3                                                                10/31/2020 14:54:33 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+CZEKAJ . . . . . .  C ADDR   0004H   R   SEG=PROG
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+PROG . . . . . . .  C SEG    0014H       REL=UNIT
+START. . . . . . .  C ADDR   0000H   R   SEG=PROG
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
