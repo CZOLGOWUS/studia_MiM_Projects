@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  MAIN                                                                 11/21/2020 21:48:06 PAGE     1
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:29:55 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -20,108 +20,153 @@ LOC  OBJ            LINE     SOURCE
                       10     
 ----                  11     RSEG PROG
 0000                  12     start:
-0000 7BFF             13             MOV R3,#0FFh
-0002 7C08             14             MOV R4,#8
-0004 7DFF             15             MOV R5,#0FFh
-0006 75F002           16             MOV B,#2
-                      17             
-0009 758C4C           18             MOV TH0,#TimerHB
-000C 758A01           19             MOV TL0,#TimerLB
-000F 758901           20             MOV TMOD,#01    ; 16-bitowy timer 0
-                      21             
-0012                  22             checkForSwitch0L:
-0012 E5B0             23                     MOV A,P3
-0014 B47FFB           24                     CJNE A,#TimerOnStatus,checkForSwitch0L
-0017 D28C             25                     SETB TR0                ; startujemy timer 0
+0000 7BFF             13             MOV R3,#0FFh                                                                       
+                                          ;ustawiamy counter do dekrementacji
+0002 7C08             14             MOV R4,#8                                                                          
+                                                  ;ilosc diod
+0004 75F002           15             MOV B,#2                                                                           
+                                                  ;do dzielenia by uzyskac kolejne diody
+                      16             
+0007 758C4C           17             MOV TH0,#TimerHB                                                                   
+                                          ;ustawiamy wysoki i niski bajt zegara 
+000A 758A01           18             MOV TL0,#TimerLB                                                                   
+                                          ;
+000D 758901           19             MOV TMOD,#01                                                                       
+                                          ;16-bitowy timer 0
+                      20             
+0010                  21             checkForSwitch0L:
+0010 E5B0             22                     MOV A,P3                                                                   
+                                                  ;do A wpisujemy stana na przyciskach
+0012 B47FFB           23                     CJNE A,#TimerOnStatus,checkForSwitch0L                          ;sprawdzamy
+                              czy pierwszy przycisk zostatal wcisniety
+0015 D28C             24                     SETB TR0                                                                   
+                                                  ;startujemy timer 0 jesli pierwszy przycisk zostal wcisniety
+0017 8000             25                     SJMP waitForSwitch0H                                                       
+                                  ;niepotrzebna linijka wpisana dla jasnosci dzialania
                       26             
 0019                  27             waitForSwitch0H:
-0019 108D11           28                     JBC TF0,DecrementR3
-001C E5B0             29                     MOV A,P3
-001E B4FFF8           30                     CJNE A,#TimerOffStatus,waitForSwitch0H
+0019 108D11           28                     JBC TF0,DecrementR3                                                        
+                                          ;skocz do dekrementacji licznika R3 jesli timer sie przepelnil i wyzeruj flage
+                              odpowiadajaca za przepelnienie
+001C E5B0             29                     MOV A,P3                                                                   
+                                                  ;do A wpisujemy stana na przyciskach
+001E B4FFF8           30                     CJNE A,#TimerOffStatus,waitForSwitch0H                          ;skocz do "
+                             waitForSwitch0H" jesli pierwszy przycisk nie zostal puszczony
                       31                     
                       32                     ;przygotuj na zapalanie
-0021 C28C             33                     CLR TR0
-0023 C28D             34                     CLR TF0
-0025 758C4C           35                     MOV TH0,#TimerHB                                                
-0028 758A01           36                     MOV TL0,#TimerLB
-002B 800A             37                     SJMP continue
+0021 C28C             33                     CLR TR0                                                                    
+                                                  ;jesli zostal puszczony zatrzymaj timer
+0023 C28D             34                     CLR TF0                                                                    
+                                                  ;wyzeruj falge przepelnienia
+0025 758C4C           35                     MOV TH0,#TimerHB                                                           
+                                          ;1.     na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec            
+                                                                                       
+0028 758A01           36                     MOV TL0,#TimerLB                                                           
+                                          ;2. na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
+002B 8008             37                     SJMP continue                                                              
+                                          ;skocz do "continiue" - kontynuj program po zliczeniu ile ma trwacprzerwa miedzy diodami
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:29:55 PAGE     2
+
                       38             
 002D                  39             DecrementR3:
-002D C28D             40                     CLR TF0
-002F 758C4C           41                     MOV TH0,#TimerHB                                                ;1.     na 
-                             dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
-0032 758A01           42                     MOV TL0,#TimerLB                                                ;2. na dwoc
-                             h linijkach resetujemy timer zeby liczyl do 0.05sec
-0035 DBE2             43                     DJNZ R3,waitForSwitch0H                                 ;zliczamy ilosc prz
-                             epelnien przez Dekrementacje R3
-                      44             
-0037                  45             continue:
-0037 E5FF             46                     MOV A,0FFh
-0039 9B               47                     SUBB A,R3                                                               
-003A FB               48                     MOV R3,A                                                                ;te
-                             raz w R3 jest ilosc przepelnien podczas trzymania przycisku czyli (ilosc przepelnien * 0.05sec)= czas wlaczania sie diód
-003B 8000             49                     JMP resetAcc
-                      50                     
-003D                  51             resetAcc:
-003D EB               52                     MOV A,R3
-003E 758C4C           53                     MOV TH0,#TimerHB
-A51 MACRO ASSEMBLER  MAIN                                                                 11/21/2020 21:48:06 PAGE     2
-
-0041 758A01           54                     MOV TL0,#TimerLB        
-0044 D28C             55                     SETB TR0
-0046 8000             56                     JMP waitForNextLED
-                      57                     
-0048                  58             waitForNextLED:
-                      59                     
+002D 758C4C           40                     MOV TH0,#TimerHB                                                           
+                                          ;1.     na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
+0030 758A01           41                     MOV TL0,#TimerLB                                                           
+                                          ;2. na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
+0033 DBE4             42                     DJNZ R3,waitForSwitch0H                                                    
+                                  ;zliczamy ilosc przepelnien przez Dekrementacje R3
+                      43             
+0035                  44             continue:
+0035 E5FF             45                     MOV A,0FFh                                                                 
+                                                  ;1. tutaj na dwoch linijkach sprawdzamy ile razy timer sie przepelnil
+0037 9B               46                     SUBB A,R3                                                                  
+                                                  ;2.
+0038 FB               47                     MOV R3,A                                                                   
+                                                  ;teraz w R3 jest ilosc przepelnien podczas trzymania przycisku czyli (
+                             ilosc przepelnien * 0.05sec)= czas wlaczania sie diód
+0039 8000             48                     JMP resetAcc                                                               
+                                          ;po przeliczeniu skocz do "resetAcc" - niepotrzebna linijka wpisana dla jasnosci dzialania
+                      49                     
+003B                  50             resetAcc:                                                                          
+                                                  ;w tej "petli" resetujemy timer tak by dla kazdej diody mial to samo opoznienie
+003B EB               51                     MOV A,R3                                                                   
+                                                  ;resetujemy Acc do ilosci przepelnien wprowadzonego czasu
+003C 758C4C           52                     MOV TH0,#TimerHB                                                           
+                                          ;1.     na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec            
+                                                                                               
+003F 758A01           53                     MOV TL0,#TimerLB                                                           
+                                          ;2. na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec  
+0042 D28C             54                     SETB TR0                                                                   
+                                                  ;wlaczamy zresetowany timer - niepotrzebna linijka wpisana dla jasnosci dzialania
+0044 8000             55                     JMP waitForNextLED
+                      56                     
+0046                  57             waitForNextLED:                                                                    
+                                          ;liczymy czas do zaswiecenia nastepnej diody
+0046 308DFD           58                     JNB TF0,$                                                                  
+                                                  ;mija 0.05s (timer do przepelnienia)
+0049 C28D             59                     CLR TF0                                                                    
+                                                  ;zerujemy flage przepelnienia
                       60                     
-0048 308DFD           61                     JNB TF0,$
-004B C28D             62                     CLR TF0
-                      63                     
-004D 14               64                     DEC A
-                      65                     
-004E 758C4C           66                     MOV TH0,#TimerHB                                                ;1.     na 
-                             dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
-0051 758A01           67                     MOV TL0,#TimerLB        
-0054 70F2             68                     JNZ waitForNextLED
+004B 14               61                     DEC A                                                                      
+                                                  ;teraz w a znaduje sie liczba przepelnien z trzymania przycisku czyli 
+                             (ilosc przepelnien * 0.05sec)= czas wlaczania sie diód
+                      62                                                                                                
+                                                          ;dekrementujemy A - czyli ten loop zadziala tyle razy ile zadz
+                             ialal loop na trzymanie przycisku
+004C 758C4C           63                     MOV TH0,#TimerHB                                                           
+                                          ;1.     na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
+004F 758A01           64                     MOV TL0,#TimerLB                                                           
+                                          ;2.             
+0052 70F2             65                     JNZ waitForNextLED                                                         
+                                          ;sprawdzamy czy A doszedl do zera
+                      66                     
+0054 8000             67                     JMP nextLedOn                                                              
+                                          ;jesli tak skocz do zapalania nastepnej diody - niepotrzebna linijka wpisana dla jasnosci dzialania
+                      68                     
                       69                     
-                      70                     
-0056 8000             71                     JMP nextLedOn
-                      72                     
-                      73                     
-                      74                     
-0058                  75             nextLedOn:
-0058 E5A0             76                     MOV A,P2
-005A 75F002           77                     MOV B,#2
-005D 84               78                     DIV AB
-                      79     
-                      80                     
-005E F5A0             81                     MOV P2,A
-                      82                     
-0060 DCDB             83                     DJNZ R4,resetAcc
-                      84                     
-                      85                     
-                      86                     ;wait for the last diode to lith up for a period of time
-0062 EB               87                     MOV A,R3
-0063 758C4C           88                     MOV TH0,#TimerHB
-0066 758A01           89                     MOV TL0,#TimerLB        
-0069 D28C             90                     SETB TR0
-                      91                     
-006B                  92                     lastLED:
-006B 308DFD           93                     JNB TF0,$
-006E C28D             94                     CLR TF0
-0070 14               95                     DEC A
-0071 758C4C           96                     MOV TH0,#TimerHB                                                ;1.     na 
-                             dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
-0074 758A01           97                     MOV TL0,#TimerLB        
-0077 70F2             98                     JNZ lastLED
-                      99                     
-                     100                     
-0079 74FF            101                     MOV A,#0FFh
-007B F5A0            102                     MOV P2,A
-                     103     
-                     104     END
+0056                  70             nextLedOn:
+0056 E5A0             71                     MOV A,P2                                                                   
+                                                  ;do Acc wpisujemy stan diod
+0058 75F002           72                     MOV B,#2                                                                   
+                                                  ;do akumulatora B wpisujemy dwojke
+005B 84               73                     DIV AB                                                                     
+                                                  ;dzielimy Acc przez dwa dzieki czemu dostajemy wszystkie diody ktore m
+                             aja sie zapalic w nastepnym kroku
+005C F5A0             74                     MOV P2,A                                                                   
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:29:55 PAGE     3
+
+                                                  ;zapalamy diody
+005E DCDB             75                     DJNZ R4,resetAcc                                                           
+                                          ;dekrepentujemy R4(ilosc diod do zapalenia) i wracamy do czekania na miniecie 
+                             czasu na zapalenie kolejnej diody
+                      76                     
+                      77                     
+                      78                     ;ten kod jest powtorka z gory i jest tutaj zeby wszystkie diody swiecily si
+                             e przy zakonczeniu programu
+0060 EB               79                     MOV A,R3
+0061 758C4C           80                     MOV TH0,#TimerHB
+0064 758A01           81                     MOV TL0,#TimerLB        
+0067 D28C             82                     SETB TR0
+                      83                     
+0069                  84                     lastLED:
+0069 308DFD           85                     JNB TF0,$
+006C C28D             86                     CLR TF0
+006E 14               87                     DEC A
+006F 758C4C           88                     MOV TH0,#TimerHB                                                
+0072 758A01           89                     MOV TL0,#TimerLB        
+0075 70F2             90                     JNZ lastLED
+                      91                     ;przestajemy liczyc czasu swiecenia sie przy ostatniej diodzie
+                      92                     
+0077 74FF             93                     MOV A,#0FFh                                                                
+                                                  ;1. zapalamy wszystkie diody
+0079 F5A0             94                     MOV P2,A                                                                   
+                                                  ;2. zapalamy wszystkie diody
+007B 8083             95                     JMP start                                                                  
+                                                  ;niepotrzebna linijka wpisana dla jasnosci dzialania
+                      96     
+                      97     END
                              
-A51 MACRO ASSEMBLER  MAIN                                                                 11/21/2020 21:48:06 PAGE     3
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:29:55 PAGE     4
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -130,15 +175,15 @@ SYMBOL TABLE LISTING
 N A M E             T Y P E  V A L U E   ATTRIBUTES
 
 B. . . . . . . . .  D ADDR   00F0H   A   
-CHECKFORSWITCH0L .  C ADDR   0012H   R   SEG=PROG
-CONTINUE . . . . .  C ADDR   0037H   R   SEG=PROG
+CHECKFORSWITCH0L .  C ADDR   0010H   R   SEG=PROG
+CONTINUE . . . . .  C ADDR   0035H   R   SEG=PROG
 DECREMENTR3. . . .  C ADDR   002DH   R   SEG=PROG
-LASTLED. . . . . .  C ADDR   006BH   R   SEG=PROG
-NEXTLEDON. . . . .  C ADDR   0058H   R   SEG=PROG
+LASTLED. . . . . .  C ADDR   0069H   R   SEG=PROG
+NEXTLEDON. . . . .  C ADDR   0056H   R   SEG=PROG
 P2 . . . . . . . .  D ADDR   00A0H   A   
 P3 . . . . . . . .  D ADDR   00B0H   A   
 PROG . . . . . . .  C SEG    007DH       REL=UNIT
-RESETACC . . . . .  C ADDR   003DH   R   SEG=PROG
+RESETACC . . . . .  C ADDR   003BH   R   SEG=PROG
 START. . . . . . .  C ADDR   0000H   R   SEG=PROG
 TF0. . . . . . . .  B ADDR   0088H.5 A   
 TH0. . . . . . . .  D ADDR   008CH   A   
@@ -149,7 +194,7 @@ TIMERONSTATUS. . .  D ADDR   007FH   A
 TL0. . . . . . . .  D ADDR   008AH   A   
 TMOD . . . . . . .  D ADDR   0089H   A   
 TR0. . . . . . . .  B ADDR   0088H.4 A   
-WAITFORNEXTLED . .  C ADDR   0048H   R   SEG=PROG
+WAITFORNEXTLED . .  C ADDR   0046H   R   SEG=PROG
 WAITFORSWITCH0H. .  C ADDR   0019H   R   SEG=PROG
 
 
