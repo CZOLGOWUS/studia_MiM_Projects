@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:29:55 PAGE     1
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:48:08 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -21,14 +21,14 @@ LOC  OBJ            LINE     SOURCE
 ----                  11     RSEG PROG
 0000                  12     start:
 0000 7BFF             13             MOV R3,#0FFh                                                                       
-                                          ;ustawiamy counter do dekrementacji
+                                          ;ustawiamy counter do dekrementacji - licznik przepelnien
 0002 7C08             14             MOV R4,#8                                                                          
                                                   ;ilosc diod
 0004 75F002           15             MOV B,#2                                                                           
-                                                  ;do dzielenia by uzyskac kolejne diody
+                                                  ;zmienna do dzielenia by uzyskac kolejne diody - funkcja wymaga
                       16             
 0007 758C4C           17             MOV TH0,#TimerHB                                                                   
-                                          ;ustawiamy wysoki i niski bajt zegara 
+                                          ;ustawiamy starszy i mlodszy bajt zegara 
 000A 758A01           18             MOV TL0,#TimerLB                                                                   
                                           ;
 000D 758901           19             MOV TMOD,#01                                                                       
@@ -36,20 +36,20 @@ LOC  OBJ            LINE     SOURCE
                       20             
 0010                  21             checkForSwitch0L:
 0010 E5B0             22                     MOV A,P3                                                                   
-                                                  ;do A wpisujemy stana na przyciskach
+                                                  ;do Acc wpisujemy stana na przyciskach
 0012 B47FFB           23                     CJNE A,#TimerOnStatus,checkForSwitch0L                          ;sprawdzamy
                               czy pierwszy przycisk zostatal wcisniety
 0015 D28C             24                     SETB TR0                                                                   
                                                   ;startujemy timer 0 jesli pierwszy przycisk zostal wcisniety
 0017 8000             25                     SJMP waitForSwitch0H                                                       
-                                  ;niepotrzebna linijka wpisana dla jasnosci dzialania
+                                  ;skok jesli wcisnieto przycisk - niepotrzebna linijka wpisana dla jasnosci dzialania
                       26             
 0019                  27             waitForSwitch0H:
 0019 108D11           28                     JBC TF0,DecrementR3                                                        
                                           ;skocz do dekrementacji licznika R3 jesli timer sie przepelnil i wyzeruj flage
                               odpowiadajaca za przepelnienie
 001C E5B0             29                     MOV A,P3                                                                   
-                                                  ;do A wpisujemy stana na przyciskach
+                                                  ;do A wpisujemy stan na przyciskach
 001E B4FFF8           30                     CJNE A,#TimerOffStatus,waitForSwitch0H                          ;skocz do "
                              waitForSwitch0H" jesli pierwszy przycisk nie zostal puszczony
                       31                     
@@ -64,8 +64,8 @@ LOC  OBJ            LINE     SOURCE
 0028 758A01           36                     MOV TL0,#TimerLB                                                           
                                           ;2. na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
 002B 8008             37                     SJMP continue                                                              
-                                          ;skocz do "continiue" - kontynuj program po zliczeniu ile ma trwacprzerwa miedzy diodami
-A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:29:55 PAGE     2
+                                          ;skocz do "continiue" - kontynuj program po zliczeniu ile ma trwac przerwa miedzy zapaleniami diod
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:48:08 PAGE     2
 
                       38             
 002D                  39             DecrementR3:
@@ -77,7 +77,7 @@ LOC  OBJ            LINE     SOURCE
                                   ;zliczamy ilosc przepelnien przez Dekrementacje R3
                       43             
 0035                  44             continue:
-0035 E5FF             45                     MOV A,0FFh                                                                 
+0035 74FF             45                     MOV A,#0FFh                                                                
                                                   ;1. tutaj na dwoch linijkach sprawdzamy ile razy timer sie przepelnil
 0037 9B               46                     SUBB A,R3                                                                  
                                                   ;2.
@@ -90,7 +90,7 @@ LOC  OBJ            LINE     SOURCE
 003B                  50             resetAcc:                                                                          
                                                   ;w tej "petli" resetujemy timer tak by dla kazdej diody mial to samo opoznienie
 003B EB               51                     MOV A,R3                                                                   
-                                                  ;resetujemy Acc do ilosci przepelnien wprowadzonego czasu
+                                                  ;resetujemy Acc i ustawiamy do ilosci przepelnien wprowadzonego czasu
 003C 758C4C           52                     MOV TH0,#TimerHB                                                           
                                           ;1.     na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec            
                                                                                                
@@ -103,13 +103,13 @@ LOC  OBJ            LINE     SOURCE
 0046                  57             waitForNextLED:                                                                    
                                           ;liczymy czas do zaswiecenia nastepnej diody
 0046 308DFD           58                     JNB TF0,$                                                                  
-                                                  ;mija 0.05s (timer do przepelnienia)
+                                                  ;mija 0.05s (timer ustawil flage przepelnienia)
 0049 C28D             59                     CLR TF0                                                                    
                                                   ;zerujemy flage przepelnienia
                       60                     
 004B 14               61                     DEC A                                                                      
-                                                  ;teraz w a znaduje sie liczba przepelnien z trzymania przycisku czyli 
-                             (ilosc przepelnien * 0.05sec)= czas wlaczania sie diód
+                                                  ;teraz w Acc znaduje sie liczba przepelnien z trzymania przycisku czyl
+                             i (ilosc przepelnien * 0.05sec)= czas wlaczania sie diód
                       62                                                                                                
                                                           ;dekrementujemy A - czyli ten loop zadziala tyle razy ile zadz
                              ialal loop na trzymanie przycisku
@@ -128,17 +128,17 @@ LOC  OBJ            LINE     SOURCE
 0056 E5A0             71                     MOV A,P2                                                                   
                                                   ;do Acc wpisujemy stan diod
 0058 75F002           72                     MOV B,#2                                                                   
-                                                  ;do akumulatora B wpisujemy dwojke
+                                                  ;do akumulatora Bcc wpisujemy dwojke
 005B 84               73                     DIV AB                                                                     
                                                   ;dzielimy Acc przez dwa dzieki czemu dostajemy wszystkie diody ktore m
                              aja sie zapalic w nastepnym kroku
 005C F5A0             74                     MOV P2,A                                                                   
-A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:29:55 PAGE     3
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:48:08 PAGE     3
 
                                                   ;zapalamy diody
 005E DCDB             75                     DJNZ R4,resetAcc                                                           
-                                          ;dekrepentujemy R4(ilosc diod do zapalenia) i wracamy do czekania na miniecie 
-                             czasu na zapalenie kolejnej diody
+                                          ;dekrementujemy R4(ilosc diod do zapalenia) i wracamy do czekania na uplyw cza
+                             su potrzebny do zapalenie kolejnej diody
                       76                     
                       77                     
                       78                     ;ten kod jest powtorka z gory i jest tutaj zeby wszystkie diody swiecily si
@@ -166,7 +166,7 @@ LOC  OBJ            LINE     SOURCE
                       96     
                       97     END
                              
-A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:29:55 PAGE     4
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:48:08 PAGE     4
 
 SYMBOL TABLE LISTING
 ------ ----- -------
