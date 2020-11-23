@@ -1,0 +1,59 @@
+A51 MACRO ASSEMBLER  MAIN                                                                 11/23/2020 14:46:08 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\main.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE main.a51 SET(SMALL) DEBUG PRINT(.\Listings\main.lst) OBJECT(.\Objects\m
+                      ain.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+----                   1     CSEG AT 0
+0000 0130              2     AJMP start ;po resecie wykonujemy skok do poczatku programu
+                       3     
+----                   4     CSEG AT 13h ;pod adresem 13h z pamieci programu umieszczamy
+0013 0138              5     AJMP Obsluga_int1 ;instrukcje skoku do procedury obslugi przerwania
+----                   6     CSEG AT 30h
+                       7             
+0030                   8     start:                                                          ;program glówny zaczyna sie
+                              od adresu 30h
+                       9                                                                             ;(za tablica wektor
+                             ów przerwan)
+                      10     ;Konfiguracja ukladu przerwan:
+0030 D28A             11             SETB IT1                                                        ;przerwanie INT1 ak
+                             tywowane zboczem
+0032 D2AA             12             SETB EX1                                                        ;zezwolenie na zewn
+                             etrzne przerwanie INT1
+0034 D2AF             13             SETB EA                                                         ;globalne odblokowa
+                             nie przerwan
+                      14     
+0036                  15     loop:
+                      16      ;glówna petla programu
+0036 0136             17             AJMP loop
+                      18             
+0038                  19     Obsluga_int1: ;procedura obslugi przerwania
+                      20     ;
+                      21     ;
+0038 32               22             RETI
+                      23             
+                      24     END
+A51 MACRO ASSEMBLER  MAIN                                                                 11/23/2020 14:46:08 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+EA . . . . . . . .  B ADDR   00A8H.7 A   
+EX1. . . . . . . .  B ADDR   00A8H.2 A   
+IT1. . . . . . . .  B ADDR   0088H.2 A   
+LOOP . . . . . . .  C ADDR   0036H   A   
+OBSLUGA_INT1 . . .  C ADDR   0038H   A   
+START. . . . . . .  C ADDR   0030H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

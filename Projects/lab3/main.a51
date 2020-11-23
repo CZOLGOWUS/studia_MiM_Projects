@@ -11,7 +11,7 @@ JMP start
 RSEG PROG
 start:
 	MOV R3,#0FFh											;ustawiamy counter do dekrementacji - licznik przepelnien
-	MOV R4,#8												;ilosc diod
+	MOV R4,#9												;ilosc diod
 	MOV B,#2												;zmienna do dzielenia by uzyskac kolejne diody - funkcja wymaga
 	
 	MOV TH0,#TimerHB										;ustawiamy starszy i mlodszy bajt zegara 
@@ -75,20 +75,7 @@ start:
 		DJNZ R4,resetAcc									;dekrementujemy R4(ilosc diod do zapalenia) i wracamy do czekania na uplyw czasu potrzebny do zapalenie kolejnej diody
 		
 		
-		;ten kod jest powtorka z gory i jest tutaj zeby wszystkie diody swiecily sie przy zakonczeniu programu
-		MOV A,R3
-		MOV TH0,#TimerHB
-		MOV TL0,#TimerLB	
-		SETB TR0
-		
-		lastLED:
-		JNB TF0,$
-		CLR TF0
-		DEC A
-		MOV TH0,#TimerHB  						
-		MOV TL0,#TimerLB	
-		JNZ lastLED
-		;przestajemy liczyc czasu swiecenia sie przy ostatniej diodzie
+
 		
 		MOV A,#0FFh											;1. zapalamy wszystkie diody
 		MOV P2,A											;2. zapalamy wszystkie diody

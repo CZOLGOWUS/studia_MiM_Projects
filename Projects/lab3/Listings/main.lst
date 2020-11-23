@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:48:08 PAGE     1
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 16:10:37 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -22,7 +22,7 @@ LOC  OBJ            LINE     SOURCE
 0000                  12     start:
 0000 7BFF             13             MOV R3,#0FFh                                                                       
                                           ;ustawiamy counter do dekrementacji - licznik przepelnien
-0002 7C08             14             MOV R4,#8                                                                          
+0002 7C09             14             MOV R4,#9                                                                          
                                                   ;ilosc diod
 0004 75F002           15             MOV B,#2                                                                           
                                                   ;zmienna do dzielenia by uzyskac kolejne diody - funkcja wymaga
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
                                           ;2. na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
 002B 8008             37                     SJMP continue                                                              
                                           ;skocz do "continiue" - kontynuj program po zliczeniu ile ma trwac przerwa miedzy zapaleniami diod
-A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:48:08 PAGE     2
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 16:10:37 PAGE     2
 
                       38             
 002D                  39             DecrementR3:
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
                                                   ;dzielimy Acc przez dwa dzieki czemu dostajemy wszystkie diody ktore m
                              aja sie zapalic w nastepnym kroku
 005C F5A0             74                     MOV P2,A                                                                   
-A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:48:08 PAGE     3
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 16:10:37 PAGE     3
 
                                                   ;zapalamy diody
 005E DCDB             75                     DJNZ R4,resetAcc                                                           
@@ -141,32 +141,18 @@ LOC  OBJ            LINE     SOURCE
                              su potrzebny do zapalenie kolejnej diody
                       76                     
                       77                     
-                      78                     ;ten kod jest powtorka z gory i jest tutaj zeby wszystkie diody swiecily si
-                             e przy zakonczeniu programu
-0060 EB               79                     MOV A,R3
-0061 758C4C           80                     MOV TH0,#TimerHB
-0064 758A01           81                     MOV TL0,#TimerLB        
-0067 D28C             82                     SETB TR0
-                      83                     
-0069                  84                     lastLED:
-0069 308DFD           85                     JNB TF0,$
-006C C28D             86                     CLR TF0
-006E 14               87                     DEC A
-006F 758C4C           88                     MOV TH0,#TimerHB                                                
-0072 758A01           89                     MOV TL0,#TimerLB        
-0075 70F2             90                     JNZ lastLED
-                      91                     ;przestajemy liczyc czasu swiecenia sie przy ostatniej diodzie
-                      92                     
-0077 74FF             93                     MOV A,#0FFh                                                                
+                      78     
+                      79                     
+0060 74FF             80                     MOV A,#0FFh                                                                
                                                   ;1. zapalamy wszystkie diody
-0079 F5A0             94                     MOV P2,A                                                                   
+0062 F5A0             81                     MOV P2,A                                                                   
                                                   ;2. zapalamy wszystkie diody
-007B 8083             95                     JMP start                                                                  
+0064 809A             82                     JMP start                                                                  
                                                   ;niepotrzebna linijka wpisana dla jasnosci dzialania
-                      96     
-                      97     END
+                      83     
+                      84     END
                              
-A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 01:48:08 PAGE     4
+A51 MACRO ASSEMBLER  MAIN                                                                 11/22/2020 16:10:37 PAGE     4
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -178,11 +164,10 @@ B. . . . . . . . .  D ADDR   00F0H   A
 CHECKFORSWITCH0L .  C ADDR   0010H   R   SEG=PROG
 CONTINUE . . . . .  C ADDR   0035H   R   SEG=PROG
 DECREMENTR3. . . .  C ADDR   002DH   R   SEG=PROG
-LASTLED. . . . . .  C ADDR   0069H   R   SEG=PROG
 NEXTLEDON. . . . .  C ADDR   0056H   R   SEG=PROG
 P2 . . . . . . . .  D ADDR   00A0H   A   
 P3 . . . . . . . .  D ADDR   00B0H   A   
-PROG . . . . . . .  C SEG    007DH       REL=UNIT
+PROG . . . . . . .  C SEG    0066H       REL=UNIT
 RESETACC . . . . .  C ADDR   003BH   R   SEG=PROG
 START. . . . . . .  C ADDR   0000H   R   SEG=PROG
 TF0. . . . . . . .  B ADDR   0088H.5 A   

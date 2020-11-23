@@ -1,8 +1,8 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    10/24/2020  17:07:21  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/23/2020  14:46:08  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
-C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\main.obj TO .\Objects\HALO PRINT (.\Listings\HALO.m51) RAMS
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\main.obj TO .\Objects\lab3 PRINT (.\Listings\lab3.m51) RAMS
 >> IZE (256)
 
 
@@ -11,7 +11,7 @@ INPUT MODULES INCLUDED:
   .\Objects\main.obj (MAIN)
 
 
-LINK MAP OF MODULE:  .\Objects\HALO (?C_STARTUP)
+LINK MAP OF MODULE:  .\Objects\lab3 (?C_STARTUP)
 
 
             TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
@@ -24,11 +24,11 @@ LINK MAP OF MODULE:  .\Objects\HALO (?C_STARTUP)
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
 * OVERLAP * CODE    0000H     0002H     ABSOLUTE     
-                    0003H     004DH                  *** GAP ***
-            CODE    0050H     000AH     ABSOLUTE     
-                    005AH     00A6H                  *** GAP ***
-            CODE    0100H     002BH     ABSOLUTE     
-                    012BH     06D5H                  *** GAP ***
+                    0003H     0010H                  *** GAP ***
+            CODE    0013H     0002H     ABSOLUTE     
+                    0015H     001BH                  *** GAP ***
+            CODE    0030H     0009H     ABSOLUTE     
+                    0039H     07C7H                  *** GAP ***
             CODE    0800H     000CH     UNIT         ?C_C51STARTUP
 
 
@@ -38,7 +38,7 @@ UNRESOLVED EXTERNAL SYMBOLS:
 
 
 
-SYMBOL TABLE OF MODULE:  .\Objects\HALO (?C_STARTUP)
+SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
 
   VALUE           TYPE          NAME
   ----------------------------------
@@ -59,7 +59,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\HALO (?C_STARTUP)
   N:0100H         SYMBOL        PBPSTACKTOP
   N:0000H         SYMBOL        PDATALEN
   N:0000H         SYMBOL        PDATASTART
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/24/2020  17:07:21  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/23/2020  14:46:08  PAGE 2
 
 
   N:0000H         SYMBOL        PPAGE
@@ -81,47 +81,20 @@ SYMBOL TABLE OF MODULE:  .\Objects\HALO (?C_STARTUP)
   -------         ENDMOD        ?C_STARTUP
 
   -------         MODULE        MAIN
-  D:0025H         SYMBOL        BEGIN
-  D:002FH         SYMBOL        CEL
-  N:000AH         SYMBOL        ILESTALYCH
-  C:0107H         SYMBOL        LOOP
-  C:0115H         SYMBOL        LOOP2
-  D:0003H         SYMBOL        MASKA
-  C:0050H         SYMBOL        STALE
-  C:0100H         SYMBOL        START
-  C:0124H         SYMBOL        WARUNEK2
-  C:0000H         LINE#         8
-  C:0100H         LINE#         16
-  C:0102H         LINE#         17
-  C:0104H         LINE#         18
-  C:0107H         LINE#         20
-  C:0108H         LINE#         21
-  C:0109H         LINE#         23
-  C:010AH         LINE#         24
-  C:010BH         LINE#         25
-  C:010CH         LINE#         26
-  C:010EH         LINE#         29
-  C:0110H         LINE#         30
-  C:0112H         LINE#         31
-  C:0113H         LINE#         32
-  C:0114H         LINE#         33
-  C:0115H         LINE#         35
-  C:0116H         LINE#         36
-  C:0117H         LINE#         37
-  C:0118H         LINE#         38
-  C:0119H         LINE#         39
-  C:011BH         LINE#         40
-  C:011CH         LINE#         41
-  C:011DH         LINE#         47
-  C:0120H         LINE#         48
-  C:0122H         LINE#         49
-  C:0124H         LINE#         51
-  C:0127H         LINE#         52
-  C:0129H         LINE#         53
+  B:00A8H.7       SYMBOL        EA
+  B:00A8H.2       SYMBOL        EX1
+  B:0088H.2       SYMBOL        IT1
+  C:0036H         SYMBOL        LOOP
+  C:0038H         SYMBOL        OBSLUGA_INT1
+  C:0030H         SYMBOL        START
+  C:0000H         LINE#         2
+  C:0013H         LINE#         5
+  C:0030H         LINE#         11
+  C:0032H         LINE#         12
+  C:0034H         LINE#         13
+  C:0036H         LINE#         17
+  C:0038H         LINE#         22
   -------         ENDMOD        MAIN
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  10/24/2020  17:07:21  PAGE 3
-
-
 
 *** WARNING L5: CODE SPACE MEMORY OVERLAP
     FROM:    0000H
@@ -137,8 +110,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\HALO (?C_STARTUP)
     ADDRESS: 080AH
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0046H BYTE ( 3%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 001CH BYTE ( 1%) *
 ******************************************************************************
 
-Program Size: data=9.0 xdata=0 code=70
+Program Size: data=9.0 xdata=0 code=28
 LINK/LOCATE RUN COMPLETE.  3 WARNING(S),  0 ERROR(S)
