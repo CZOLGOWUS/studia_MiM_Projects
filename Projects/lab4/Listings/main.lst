@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  MAIN                                                                 11/24/2020 18:00:19 PAGE     1
+A51 MACRO ASSEMBLER  MAIN                                                                 11/24/2020 18:04:36 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -25,7 +25,8 @@ LOC  OBJ            LINE     SOURCE
                       15             
 0034 D2A8             16             SETB EX0 ; wlaczenie przerwania INT0
 0036 D2AF             17             SETB EA ; odblokowanie wszystkich przerwan
-0038 D28A             18             SETB IT1 
+0038 D28A             18             SETB IT1        ;ustawia czy aktowowane zobczem czy stanem niskim 0 - zbocze 1 - st
+                             an niski
                       19             
 003A C28D             20             CLR TF0
 003C 758901           21             MOV TMOD,#01
@@ -56,7 +57,7 @@ LOC  OBJ            LINE     SOURCE
                       46     
                       47     END
                                      
-A51 MACRO ASSEMBLER  MAIN                                                                 11/24/2020 18:00:19 PAGE     2
+A51 MACRO ASSEMBLER  MAIN                                                                 11/24/2020 18:04:36 PAGE     2
 
 SYMBOL TABLE LISTING
 ------ ----- -------

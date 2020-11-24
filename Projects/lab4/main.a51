@@ -15,7 +15,7 @@ reset:
 	
 	SETB EX0 ; wlaczenie przerwania INT0
 	SETB EA ; odblokowanie wszystkich przerwan
-	SETB IT1 
+	SETB IT1 	;ustawia czy aktowowane zobczem czy stanem niskim 0 - zbocze 1 - stan niski
 	
 	CLR TF0
 	MOV TMOD,#01
