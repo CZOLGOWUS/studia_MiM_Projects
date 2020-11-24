@@ -1,37 +1,48 @@
 CSEG AT 0
-AJMP start ;po resecie wykonujemy skok do poczatku programu
+AJMP reset
 
-CSEG AT 13h ;pod adresem 13h z pamieci programu umieszczamy
-AJMP Obsluga_int1 ;instrukcje skoku do procedury obslugi przerwania
+CSEG AT 03h
+AJMP INT0service ; skok do procedury obslugi przerwania
+				 ; zewnetrznego INT0
+				 
+	TimerHB DATA 76
+	TimerLB DATA 01
+
 CSEG AT 30h
+reset:
+	MOV R0,#0FFh
+	MOV R1,#20
 	
-howManyOverflowsForoneSecond Data = #20
+	SETB EX0 ; wlaczenie przerwania INT0
+	SETB EA ; odblokowanie wszystkich przerwan
+	SETB IT1 
 	
-start: 								;program glówny zaczyna sie od adresu 30h
-									;(za tablica wektorów przerwan)
+	CLR TF0
+	MOV TMOD,#01
+	MOV TH0,#TimerHB
+	MOV TL0,#TimerLB
+	SETB TR0
+	MOV A,R1
+	SJMP waitForSec
+	
+INT0service: ; procedura obslugi przerwania INT0
+	MOV P2,R0
+	RETI ; powrót z przerwania
 
-waitForSec:											;liczymy czas do zaswiecenia nastepnej diody
-	JNB TF0,$										;mija 0.05s (timer ustawil flage przepelnienia)
-	CLR TF0											;zerujemy flage przepelnienia
+
+timerR:
+	DEC R0
+	MOV A,R1
 	
-	DEC A											;teraz w Acc znaduje sie liczba przepelnien z trzymania przycisku czyli (ilosc przepelnien * 0.05sec)= czas wlaczania sie diód
-												;dekrementujemy A - czyli ten loop zadziala tyle razy ile zadzialal loop na trzymanie przycisku
-	MOV TH0,#TimerHB  									;1.	na dwoch linijkach resetujemy timer zeby liczyl do 0.05sec
-	MOV TL0,#TimerLB									;2.		
+waitForSec:
+	JNB TF0,$		
+	CLR TF0		
+	DEC A	
+	MOV TH0,#TimerHB
+	MOV TL0,#TimerLB
 	JNZ waitForSec
-
-;Konfiguracja ukladu przerwan:
-	SETB IT1 							;przerwanie INT1 aktywowane zboczem
-	SETB EX1 							;zezwolenie na zewnetrzne przerwanie INT1
-	SETB EA 							;globalne odblokowanie przerwan
-
-loop:
- ;glówna petla programu
-	AJMP loop
 	
-Obsluga_int1: ;procedura obslugi przerwania
-;
-;
-	RETI
-	
+	SJMP timerR
+
 END
+	

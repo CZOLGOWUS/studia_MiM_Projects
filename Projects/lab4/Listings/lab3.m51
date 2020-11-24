@@ -1,14 +1,15 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/23/2020  14:46:08  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/24/2020  18:00:19  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
-C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\main.obj TO .\Objects\lab3 PRINT (.\Listings\lab3.m51) RAMS
->> IZE (256)
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\main.obj, .\Objects\mainTest.obj TO .\Objects\lab3 PRINT (.
+>> \Listings\lab3.m51) RAMSIZE (256)
 
 
 INPUT MODULES INCLUDED:
   .\Objects\STARTUP.obj (?C_STARTUP)
   .\Objects\main.obj (MAIN)
+  .\Objects\mainTest.obj (MAINTEST)
 
 
 LINK MAP OF MODULE:  .\Objects\lab3 (?C_STARTUP)
@@ -24,11 +25,10 @@ LINK MAP OF MODULE:  .\Objects\lab3 (?C_STARTUP)
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
 * OVERLAP * CODE    0000H     0002H     ABSOLUTE     
-                    0003H     0010H                  *** GAP ***
-            CODE    0013H     0002H     ABSOLUTE     
-                    0015H     001BH                  *** GAP ***
-            CODE    0030H     0009H     ABSOLUTE     
-                    0039H     07C7H                  *** GAP ***
+            CODE    0003H     0002H     ABSOLUTE     
+                    0005H     002BH                  *** GAP ***
+            CODE    0030H     002FH     ABSOLUTE     
+                    005FH     07A1H                  *** GAP ***
             CODE    0800H     000CH     UNIT         ?C_C51STARTUP
 
 
@@ -59,7 +59,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
   N:0100H         SYMBOL        PBPSTACKTOP
   N:0000H         SYMBOL        PDATALEN
   N:0000H         SYMBOL        PDATASTART
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/23/2020  14:46:08  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/24/2020  18:00:19  PAGE 2
 
 
   N:0000H         SYMBOL        PPAGE
@@ -82,19 +82,52 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
 
   -------         MODULE        MAIN
   B:00A8H.7       SYMBOL        EA
-  B:00A8H.2       SYMBOL        EX1
+  B:00A8H.0       SYMBOL        EX0
+  C:004AH         SYMBOL        INT0SERVICE
   B:0088H.2       SYMBOL        IT1
-  C:0036H         SYMBOL        LOOP
-  C:0038H         SYMBOL        OBSLUGA_INT1
-  C:0030H         SYMBOL        START
+  D:00A0H         SYMBOL        P2
+  C:0030H         SYMBOL        RESET
+  B:0088H.5       SYMBOL        TF0
+  D:008CH         SYMBOL        TH0
+  D:004CH         SYMBOL        TIMERHB
+  D:0001H         SYMBOL        TIMERLB
+  C:004DH         SYMBOL        TIMERR
+  D:008AH         SYMBOL        TL0
+  D:0089H         SYMBOL        TMOD
+  B:0088H.4       SYMBOL        TR0
+  C:004FH         SYMBOL        WAITFORSEC
   C:0000H         LINE#         2
-  C:0013H         LINE#         5
-  C:0030H         LINE#         11
-  C:0032H         LINE#         12
-  C:0034H         LINE#         13
+  C:0003H         LINE#         5
+  C:0030H         LINE#         13
+  C:0032H         LINE#         14
+  C:0034H         LINE#         16
   C:0036H         LINE#         17
-  C:0038H         LINE#         22
+  C:0038H         LINE#         18
+  C:003AH         LINE#         20
+  C:003CH         LINE#         21
+  C:003FH         LINE#         22
+  C:0042H         LINE#         23
+  C:0045H         LINE#         24
+  C:0047H         LINE#         25
+  C:0048H         LINE#         26
+  C:004AH         LINE#         29
+  C:004CH         LINE#         30
+  C:004DH         LINE#         34
+  C:004EH         LINE#         35
+  C:004FH         LINE#         38
+  C:0052H         LINE#         39
+  C:0054H         LINE#         40
+  C:0055H         LINE#         41
+  C:0058H         LINE#         42
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/24/2020  18:00:19  PAGE 3
+
+
+  C:005BH         LINE#         43
+  C:005DH         LINE#         45
   -------         ENDMOD        MAIN
+
+  -------         MODULE        MAINTEST
+  -------         ENDMOD        MAINTEST
 
 *** WARNING L5: CODE SPACE MEMORY OVERLAP
     FROM:    0000H
@@ -110,8 +143,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
     ADDRESS: 080AH
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 001CH BYTE ( 1%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0042H BYTE ( 3%) *
 ******************************************************************************
 
-Program Size: data=9.0 xdata=0 code=28
+Program Size: data=9.0 xdata=0 code=66
 LINK/LOCATE RUN COMPLETE.  3 WARNING(S),  0 ERROR(S)

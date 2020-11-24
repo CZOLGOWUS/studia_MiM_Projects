@@ -1,0 +1,59 @@
+A51 MACRO ASSEMBLER  MAINTEST                                                             11/24/2020 18:00:19 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\mainTest.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE mainTest.a51 SET(SMALL) DEBUG PRINT(.\Listings\mainTest.lst) OBJECT(.\O
+                      bjects\mainTest.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ;CSEG AT 0
+                       2     ;AJMP reset
+                       3     ;
+                       4     ;CSEG AT 03h
+                       5     ;AJMP INT0service ; skok do procedury obslugi przerwania
+                       6     ; ; zewnetrznego INT0
+                       7     ; 
+                       8     ;CSEG AT 30h
+                       9     ;       
+                      10     ;reset:
+                      11     ;       SETB EX0 ; wlaczenie przerwania INT0
+                      12     ;       SETB EA ; odblokowanie wszystkich przerwan
+                      13     ;loop:
+                      14     ;       ACALL delay ; przykladowy program glówny
+                      15     ;       CPL P2.7
+                      16     ;       SJMP loop
+                      17     ;INT0service: ; procedura obslugi przerwania INT0
+                      18     ;       ;PUSH ACC ; zapamietanie akumulatora
+                      19     ;       ;PUSH PSW ; i rejestru stanu
+                      20     ;       CPL P2.0
+                      21     ;       ;POP PSW
+                      22     ;       ;POP ACC
+                      23     ;       RETI ; powrót z przerwania
+                      24     ;delay:
+                      25     ;       MOV R0,#100
+                      26     ;del2:
+                      27     ;       MOV R1,#255
+                      28     ;del1:
+                      29     ;       NOP
+                      30     ;       NOP
+                      31     ;       DJNZ R1,del1
+                      32     ;       DJNZ R0,del2
+                      33     ;       RET
+                      34     ;END
+*** WARNING #A41 IN 34 (mainTest.a51, LINE 34): MISSING 'END' STATEMENT
+A51 MACRO ASSEMBLER  MAINTEST                                                             11/24/2020 18:00:19 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  1 WARNING(S), 0 ERROR(S)
