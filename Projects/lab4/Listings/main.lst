@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  MAIN                                                                 11/26/2020 19:29:16 PAGE     1
+A51 MACRO ASSEMBLER  MAIN                                                                 11/26/2020 19:35:43 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -47,8 +47,8 @@ LOC  OBJ            LINE     SOURCE
                              TF0 (sztucznie controlujemy TF0)
 0050 758C4C           35             MOV TH0,#TimerHB        ;reset timera
 0053 758A01           36             MOV TL0,#TimerLB        ;
-0056 80F2             37             SJMP waitForSec                 ;powtarzac waitForSec do niewystapienia przerwania 
-                             na timerze 0
+0056 80F2             37             SJMP waitForSec         ;powtarzac waitForSec do niewystapienia przerwania na timer
+                             ze 0
                       38     
                       39     
                       40                     
@@ -62,13 +62,13 @@ LOC  OBJ            LINE     SOURCE
 005E 88A0             47             MOV P2,R0                       ;ustawiamy diody
                       48             
 0060                  49             return:
-0060 32               50                     RETI                    ;powrót z przerwania
+0060 32               50                     RETI                    ;powrot z przerwania
                       51     
                       52     END
-A51 MACRO ASSEMBLER  MAIN                                                                 11/26/2020 19:29:16 PAGE     2
+A51 MACRO ASSEMBLER  MAIN                                                                 11/26/2020 19:35:43 PAGE     2
 
                                      
-A51 MACRO ASSEMBLER  MAIN                                                                 11/26/2020 19:29:16 PAGE     3
+A51 MACRO ASSEMBLER  MAIN                                                                 11/26/2020 19:35:43 PAGE     3
 
 SYMBOL TABLE LISTING
 ------ ----- -------
