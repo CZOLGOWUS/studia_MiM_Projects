@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/26/2020  19:35:44  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/26/2020  20:09:28  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
@@ -28,8 +28,8 @@ LINK MAP OF MODULE:  .\Objects\lab3 (?C_STARTUP)
                     0003H     0008H                  *** GAP ***
             CODE    000BH     0002H     ABSOLUTE     
                     000DH     0023H                  *** GAP ***
-            CODE    0030H     0031H     ABSOLUTE     
-                    0061H     079FH                  *** GAP ***
+            CODE    0030H     0032H     ABSOLUTE     
+                    0062H     079EH                  *** GAP ***
             CODE    0800H     000CH     UNIT         ?C_C51STARTUP
 
 
@@ -59,7 +59,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
   N:0000H         SYMBOL        PBPSTACK
   N:0100H         SYMBOL        PBPSTACKTOP
   N:0000H         SYMBOL        PDATALEN
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/26/2020  19:35:44  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/26/2020  20:09:28  PAGE 2
 
 
   N:0000H         SYMBOL        PDATASTART
@@ -84,11 +84,11 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
   -------         MODULE        MAIN
   B:00A8H.7       SYMBOL        EA
   B:00A8H.1       SYMBOL        ET0
-  C:0058H         SYMBOL        INT0TIMER
+  C:0059H         SYMBOL        INT0TIMER
   B:0088H.2       SYMBOL        IT1
   D:00A0H         SYMBOL        P2
   C:0030H         SYMBOL        RESET
-  C:0060H         SYMBOL        RETURN
+  C:0061H         SYMBOL        RETURN
   B:0088H.5       SYMBOL        TF0
   D:008CH         SYMBOL        TH0
   D:004CH         SYMBOL        TIMERHB
@@ -96,7 +96,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
   D:008AH         SYMBOL        TL0
   D:0089H         SYMBOL        TMOD
   B:0088H.4       SYMBOL        TR0
-  C:004AH         SYMBOL        WAITFORSEC
+  C:004BH         SYMBOL        WAITFORSEC
   C:0000H         LINE#         5
   C:000BH         LINE#         9
   C:0030H         LINE#         14
@@ -111,21 +111,22 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
   C:0045H         LINE#         26
   C:0047H         LINE#         27
   C:0048H         LINE#         28
-  C:004AH         LINE#         32
+  C:0049H         LINE#         29
   C:004BH         LINE#         33
-  C:004EH         LINE#         34
-  C:0050H         LINE#         35
-  C:0053H         LINE#         36
-  C:0056H         LINE#         37
-  C:0058H         LINE#         42
-  C:005AH         LINE#         43
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/26/2020  19:35:44  PAGE 3
+  C:004CH         LINE#         34
+  C:004FH         LINE#         35
+  C:0051H         LINE#         36
+  C:0054H         LINE#         37
+  C:0057H         LINE#         38
+  C:0059H         LINE#         43
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/26/2020  20:09:28  PAGE 3
 
 
-  C:005CH         LINE#         45
+  C:005BH         LINE#         44
   C:005DH         LINE#         46
   C:005EH         LINE#         47
-  C:0060H         LINE#         50
+  C:005FH         LINE#         48
+  C:0061H         LINE#         51
   -------         ENDMOD        MAIN
 
   -------         MODULE        MAINTEST
@@ -145,8 +146,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
     ADDRESS: 080AH
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0044H BYTE ( 3%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0045H BYTE ( 3%) *
 ******************************************************************************
 
-Program Size: data=9.0 xdata=0 code=68
+Program Size: data=9.0 xdata=0 code=69
 LINK/LOCATE RUN COMPLETE.  3 WARNING(S),  0 ERROR(S)

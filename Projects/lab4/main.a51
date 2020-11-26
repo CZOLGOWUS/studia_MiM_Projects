@@ -16,7 +16,7 @@ reset:
 	
 	SETB EA 	; odblokowanie przerwan
 	SETB ET0   	; odblokowanie przerwan na timerze 0
-	SETB IT1 	;ustawia czy aktowowane zobczem czy stanem niskim 0 - zbocze 1 - stan niski
+	SETB IT1 	;ustawia czy aktowowane zobczem czy stanem niskim |  0 - zbocze, 1 - stan niski
 	
 	;ustawienie Timera 0
 	CLR TF0
@@ -25,6 +25,7 @@ reset:
 	MOV TL0,#TimerLB
 	SETB TR0
 	MOV A,R1
+	INC A			;iknementujemy zeby dekremencaja ponizej nic niezrobila
 	SJMP waitForSec
 	
 	
