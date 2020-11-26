@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/24/2020  18:04:36  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    11/26/2020  19:31:56  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
@@ -25,10 +25,11 @@ LINK MAP OF MODULE:  .\Objects\lab3 (?C_STARTUP)
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
 * OVERLAP * CODE    0000H     0002H     ABSOLUTE     
-            CODE    0003H     0002H     ABSOLUTE     
-                    0005H     002BH                  *** GAP ***
-            CODE    0030H     002FH     ABSOLUTE     
-                    005FH     07A1H                  *** GAP ***
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0002H     ABSOLUTE     
+                    000DH     0023H                  *** GAP ***
+            CODE    0030H     0031H     ABSOLUTE     
+                    0061H     079FH                  *** GAP ***
             CODE    0800H     000CH     UNIT         ?C_C51STARTUP
 
 
@@ -58,10 +59,10 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
   N:0000H         SYMBOL        PBPSTACK
   N:0100H         SYMBOL        PBPSTACKTOP
   N:0000H         SYMBOL        PDATALEN
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/26/2020  19:31:56  PAGE 2
+
+
   N:0000H         SYMBOL        PDATASTART
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/24/2020  18:04:36  PAGE 2
-
-
   N:0000H         SYMBOL        PPAGE
   N:0000H         SYMBOL        PPAGEENABLE
   D:00A0H         SYMBOL        PPAGE_SFR
@@ -82,48 +83,49 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
 
   -------         MODULE        MAIN
   B:00A8H.7       SYMBOL        EA
-  B:00A8H.0       SYMBOL        EX0
-  C:004AH         SYMBOL        INT0SERVICE
+  B:00A8H.1       SYMBOL        ET0
+  C:0058H         SYMBOL        INT0TIMER
   B:0088H.2       SYMBOL        IT1
   D:00A0H         SYMBOL        P2
   C:0030H         SYMBOL        RESET
+  C:0060H         SYMBOL        RETURN
   B:0088H.5       SYMBOL        TF0
   D:008CH         SYMBOL        TH0
   D:004CH         SYMBOL        TIMERHB
   D:0001H         SYMBOL        TIMERLB
-  C:004DH         SYMBOL        TIMERR
   D:008AH         SYMBOL        TL0
   D:0089H         SYMBOL        TMOD
   B:0088H.4       SYMBOL        TR0
-  C:004FH         SYMBOL        WAITFORSEC
-  C:0000H         LINE#         2
-  C:0003H         LINE#         5
-  C:0030H         LINE#         13
-  C:0032H         LINE#         14
-  C:0034H         LINE#         16
-  C:0036H         LINE#         17
-  C:0038H         LINE#         18
-  C:003AH         LINE#         20
-  C:003CH         LINE#         21
-  C:003FH         LINE#         22
-  C:0042H         LINE#         23
-  C:0045H         LINE#         24
-  C:0047H         LINE#         25
-  C:0048H         LINE#         26
-  C:004AH         LINE#         29
-  C:004CH         LINE#         30
-  C:004DH         LINE#         34
-  C:004EH         LINE#         35
-  C:004FH         LINE#         38
-  C:0052H         LINE#         39
-  C:0054H         LINE#         40
-  C:0055H         LINE#         41
+  C:004AH         SYMBOL        WAITFORSEC
+  C:0000H         LINE#         5
+  C:000BH         LINE#         9
+  C:0030H         LINE#         14
+  C:0032H         LINE#         15
+  C:0034H         LINE#         17
+  C:0036H         LINE#         18
+  C:0038H         LINE#         19
+  C:003AH         LINE#         22
+  C:003CH         LINE#         23
+  C:003FH         LINE#         24
+  C:0042H         LINE#         25
+  C:0045H         LINE#         26
+  C:0047H         LINE#         27
+  C:0048H         LINE#         28
+  C:004AH         LINE#         32
+  C:004BH         LINE#         33
+  C:004EH         LINE#         34
+  C:0050H         LINE#         35
+  C:0053H         LINE#         36
+  C:0056H         LINE#         37
   C:0058H         LINE#         42
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/24/2020  18:04:36  PAGE 3
+  C:005AH         LINE#         43
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  11/26/2020  19:31:56  PAGE 3
 
 
-  C:005BH         LINE#         43
-  C:005DH         LINE#         45
+  C:005CH         LINE#         45
+  C:005DH         LINE#         46
+  C:005EH         LINE#         47
+  C:0060H         LINE#         50
   -------         ENDMOD        MAIN
 
   -------         MODULE        MAINTEST
@@ -143,8 +145,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\lab3 (?C_STARTUP)
     ADDRESS: 080AH
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0042H BYTE ( 3%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0044H BYTE ( 3%) *
 ******************************************************************************
 
-Program Size: data=9.0 xdata=0 code=66
+Program Size: data=9.0 xdata=0 code=68
 LINK/LOCATE RUN COMPLETE.  3 WARNING(S),  0 ERROR(S)

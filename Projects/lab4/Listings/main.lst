@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  MAIN                                                                 11/24/2020 18:04:36 PAGE     1
+A51 MACRO ASSEMBLER  MAIN                                                                 11/26/2020 19:29:16 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -8,56 +8,67 @@ ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE main.a51 SET(SMALL) DEBUG PRINT
 
 LOC  OBJ            LINE     SOURCE
 
-----                   1     CSEG AT 0
-0000 0130              2     AJMP reset
+  004C                 1     TimerHB DATA 76
+  0001                 2     TimerLB DATA 01
                        3     
-----                   4     CSEG AT 03h
-0003 014A              5     AJMP INT0service ; skok do procedury obslugi przerwania
-                       6                                      ; zewnetrznego INT0
+----                   4     CSEG AT 0
+0000 0130              5     AJMP reset
+                       6     
                        7                                      
-  004C                 8             TimerHB DATA 76
-  0001                 9             TimerLB DATA 01
-                      10     
-----                  11     CSEG AT 30h
-0030                  12     reset:
-0030 78FF             13             MOV R0,#0FFh
-0032 7914             14             MOV R1,#20
-                      15             
-0034 D2A8             16             SETB EX0 ; wlaczenie przerwania INT0
-0036 D2AF             17             SETB EA ; odblokowanie wszystkich przerwan
-0038 D28A             18             SETB IT1        ;ustawia czy aktowowane zobczem czy stanem niskim 0 - zbocze 1 - st
+----                   8     CSEG AT 0Bh
+000B 0158              9     AJMP INT0Timer          ;oznaczenie gdzie ma skoczyc program przy wystapieniu przerwania na
+                              timerze0
+                      10                                     
+                      11     
+----                  12     CSEG AT 30h
+0030                  13     reset:
+0030 78FF             14             MOV R0,#0FFh
+0032 7914             15             MOV R1,#20
+                      16             
+0034 D2AF             17             SETB EA         ; odblokowanie przerwan
+0036 D2A9             18             SETB ET0        ; odblokowanie przerwan na timerze 0
+0038 D28A             19             SETB IT1        ;ustawia czy aktowowane zobczem czy stanem niskim 0 - zbocze 1 - st
                              an niski
-                      19             
-003A C28D             20             CLR TF0
-003C 758901           21             MOV TMOD,#01
-003F 758C4C           22             MOV TH0,#TimerHB
-0042 758A01           23             MOV TL0,#TimerLB
-0045 D28C             24             SETB TR0
-0047 E9               25             MOV A,R1
-0048 8005             26             SJMP waitForSec
-                      27             
-004A                  28     INT0service: ; procedura obslugi przerwania INT0
-004A 88A0             29             MOV P2,R0
-004C 32               30             RETI ; powrót z przerwania
-                      31     
-                      32     
-004D                  33     timerR:
-004D 18               34             DEC R0
-004E E9               35             MOV A,R1
-                      36             
-004F                  37     waitForSec:
-004F 308DFD           38             JNB TF0,$               
-0052 C28D             39             CLR TF0         
-0054 14               40             DEC A   
-0055 758C4C           41             MOV TH0,#TimerHB
-0058 758A01           42             MOV TL0,#TimerLB
-005B 70F2             43             JNZ waitForSec
+                      20             
+                      21             ;ustawienie Timera 0
+003A C28D             22             CLR TF0
+003C 758901           23             MOV TMOD,#01
+003F 758C4C           24             MOV TH0,#TimerHB
+0042 758A01           25             MOV TL0,#TimerLB
+0045 D28C             26             SETB TR0
+0047 E9               27             MOV A,R1
+0048 8000             28             SJMP waitForSec
+                      29             
+                      30             
+004A                  31     waitForSec:
+004A 14               32             DEC A                           ;obnizamy counter 0.05 sekund
+004B 308DFD           33             JNB TF0,$                       ;zlicza 0.05s
+004E C28D             34             CLR TF0                         ;CLR po ustawieniu w przerwaniu zeby wyszedl z JNB 
+                             TF0 (sztucznie controlujemy TF0)
+0050 758C4C           35             MOV TH0,#TimerHB        ;reset timera
+0053 758A01           36             MOV TL0,#TimerLB        ;
+0056 80F2             37             SJMP waitForSec                 ;powtarzac waitForSec do niewystapienia przerwania 
+                             na timerze 0
+                      38     
+                      39     
+                      40                     
+0058                  41     INT0Timer:
+0058 D28D             42             SETB TF0                        ;setujemy ten bit by wyszedl z JNB TF0
+005A 7004             43             JNZ return                      ;jesli petla "waitForSec" przebiegla 20 razy to moz
+                             esz przejsc
                       44             
-005D 80EE             45             SJMP timerR
-                      46     
-                      47     END
+005C 18               45             DEC R0                          ;zliczanie na diodach
+005D E9               46             MOV A,R1                        ;Reset Acc do 20
+005E 88A0             47             MOV P2,R0                       ;ustawiamy diody
+                      48             
+0060                  49             return:
+0060 32               50                     RETI                    ;powrót z przerwania
+                      51     
+                      52     END
+A51 MACRO ASSEMBLER  MAIN                                                                 11/26/2020 19:29:16 PAGE     2
+
                                      
-A51 MACRO ASSEMBLER  MAIN                                                                 11/24/2020 18:04:36 PAGE     2
+A51 MACRO ASSEMBLER  MAIN                                                                 11/26/2020 19:29:16 PAGE     3
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -66,20 +77,20 @@ SYMBOL TABLE LISTING
 N A M E             T Y P E  V A L U E   ATTRIBUTES
 
 EA . . . . . . . .  B ADDR   00A8H.7 A   
-EX0. . . . . . . .  B ADDR   00A8H.0 A   
-INT0SERVICE. . . .  C ADDR   004AH   A   
+ET0. . . . . . . .  B ADDR   00A8H.1 A   
+INT0TIMER. . . . .  C ADDR   0058H   A   
 IT1. . . . . . . .  B ADDR   0088H.2 A   
 P2 . . . . . . . .  D ADDR   00A0H   A   
 RESET. . . . . . .  C ADDR   0030H   A   
+RETURN . . . . . .  C ADDR   0060H   A   
 TF0. . . . . . . .  B ADDR   0088H.5 A   
 TH0. . . . . . . .  D ADDR   008CH   A   
 TIMERHB. . . . . .  D ADDR   004CH   A   
 TIMERLB. . . . . .  D ADDR   0001H   A   
-TIMERR . . . . . .  C ADDR   004DH   A   
 TL0. . . . . . . .  D ADDR   008AH   A   
 TMOD . . . . . . .  D ADDR   0089H   A   
 TR0. . . . . . . .  B ADDR   0088H.4 A   
-WAITFORSEC . . . .  C ADDR   004FH   A   
+WAITFORSEC . . . .  C ADDR   004AH   A   
 
 
 REGISTER BANK(S) USED: 0 
